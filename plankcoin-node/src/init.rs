@@ -10,7 +10,7 @@ pub struct Settings {
 }
 
 pub fn try_build() -> AnyResult<Settings> {
-    let opt = opt::parse(); // parse command line arguments\
+    let opt = opt::parse(); // parse command line arguments
 
     logger::build(&opt)?; // initialize logger
 

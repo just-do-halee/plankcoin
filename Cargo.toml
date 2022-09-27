@@ -1,0 +1,8 @@
+# Plankcoin Blockchain
+# by just-do-halee.
+
+[workspace]
+members = [
+    "plankcoin-core",
+    "plankcoin-node",
+]

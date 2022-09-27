@@ -1,0 +1,14 @@
+[package]
+name = "plankcoin-core"
+version = "0.1.0"
+edition = "2021"
+authors = ["just-do-halee <just.do.halee@gmail.com>"]
+homepage = "https://github.com/just-do-halee/plankcoin"
+repository = "https://github.com/just-do-halee/plankcoin"
+keywords = ["plankcoin", "blockchain", "crypto"]
+categories = ["cryptography", "cryptography::cryptocurrencies"]
+license = "LGPL-3.0-or-later"
+readme = "README.md"
+description = "Plankcoin core"
+
+[dependencies]

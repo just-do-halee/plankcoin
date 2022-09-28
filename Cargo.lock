@@ -216,9 +216,9 @@ dependencies = [
 
 [[package]]
 name = "fn_once"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3430e19bc9bf8bcca0c2208ef063755365fb76a46670aefe2f46dd029170993"
+checksum = "36bcd2392e3d3a4d1b83b70e8f7573aee13279f56d85d3805b076f3a7531f179"
 dependencies = [
  "quote",
  "syn",

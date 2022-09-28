@@ -11,6 +11,10 @@ homepage.workspace = true
 license.workspace = true
 readme.workspace = true
 
+[features]
+# default = ["once_off"] # disabling #[once] by default
+once_off = []
+
 [dependencies]
 # core
 plankcoin-core = { path = "../plankcoin-core" }
@@ -31,6 +35,6 @@ config = "0.13.2"
 crossterm = "0.25"
 
 # util
-fn_once = "0.2.0"
+fn_once = "0.3"
 lazy_static = "1.4.0"
 serde = { version = "1.0.145", features = ["derive"] }

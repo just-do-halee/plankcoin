@@ -8,6 +8,11 @@ pub struct Settings {
     pub from_opt: opt::Opt,
     pub from_config: config::PlankcoinConfig,
 }
+impl Settings {
+    pub fn as_wallet_path(&self) -> &Path {
+        &self.from_config.account.wallet
+    }
+}
 
 pub fn try_build() -> AnyResult<Settings> {
     let opt = opt::parse(); // parse command line arguments

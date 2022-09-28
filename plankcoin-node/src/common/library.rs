@@ -1,4 +1,6 @@
-pub use anyhow::Result as AnyResult;
+pub use thiserror::Error;
+
+pub use anyhow::{bail, Result as AnyResult};
 
 pub use serde::{Deserialize, Serialize};
 

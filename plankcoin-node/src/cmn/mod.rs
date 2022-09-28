@@ -5,9 +5,9 @@ pub use std::{
 };
 
 pub use constant::*;
-pub use functions::*;
+pub use function::*;
 pub use library::*;
 
 mod constant;
-mod functions;
+mod function;
 mod library;

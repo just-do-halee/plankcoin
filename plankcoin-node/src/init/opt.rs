@@ -8,10 +8,10 @@ use clap::{AppSettings, ArgAction, Parser, Subcommand};
 #[clap(global_setting(AppSettings::DeriveDisplayOrder))]
 pub struct Opt {
     /// Verbose mode (-v, -vv(default), -vvv, etc.)
-    #[clap(short, long, action = ArgAction::Count)]
+    #[clap(short, long, default_value_t = 2, action = ArgAction::Count)]
     pub verbose: u8,
 
-    /// Quiet mode (only errors)
+    /// Quiet mode
     #[clap(short, long, action)]
     pub quiet: bool,
 

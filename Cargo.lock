@@ -404,6 +404,12 @@ dependencies = [
 [[package]]
 name = "plankcoin-core"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "log",
+ "pretty_env_logger",
+ "thiserror",
+]
 
 [[package]]
 name = "plankcoin-node"
@@ -418,6 +424,7 @@ dependencies = [
  "plankcoin-core",
  "pretty_env_logger",
  "serde",
+ "thiserror",
 ]
 
 [[package]]

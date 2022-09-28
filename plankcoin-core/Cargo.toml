@@ -1,14 +1,21 @@
 [package]
 name = "plankcoin-core"
-version = "0.1.0"
-edition = "2021"
-authors = ["just-do-halee <just.do.halee@gmail.com>"]
-homepage = "https://github.com/just-do-halee/plankcoin"
-repository = "https://github.com/just-do-halee/plankcoin"
-keywords = ["plankcoin", "blockchain", "crypto"]
-categories = ["cryptography", "cryptography::cryptocurrencies"]
-license = "LGPL-3.0-or-later"
-readme = "README.md"
 description = "Plankcoin core"
+authors.workspace = true
+version.workspace = true
+edition.workspace = true
+categories.workspace = true
+keywords.workspace = true
+repository.workspace = true
+homepage.workspace = true
+license.workspace = true
+readme.workspace = true
 
 [dependencies]
+# log
+log = { workspace = true }
+pretty_env_logger = { workspace = true }
+
+# error
+anyhow = { workspace = true }
+thiserror = { workspace = true }

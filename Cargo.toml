@@ -6,3 +6,23 @@ members = [
     "plankcoin-core",
     "plankcoin-node",
 ]
+
+[workspace.package]
+authors = ["just-do-halee <just.do.halee@gmail.com>"]
+version = "0.1.0"
+edition = "2021"
+categories = ["cryptography", "cryptography::cryptocurrencies"]
+keywords = ["plankcoin", "blockchain", "crypto"]
+repository = "https://github.com/just-do-halee/plankcoin"
+homepage = "https://github.com/just-do-halee/plankcoin"
+license = "LGPL-3.0-or-later"
+readme = "README.md"
+
+[workspace.dependencies]
+# log
+log = "0.4"
+pretty_env_logger = "0.4"
+
+# error
+anyhow = "1"
+thiserror = "1"

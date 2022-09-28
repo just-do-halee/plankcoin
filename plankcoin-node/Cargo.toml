@@ -1,26 +1,27 @@
 [package]
 name = "plankcoin-node"
-version = "0.1.0"
-edition = "2021"
-authors = ["just-do-halee <just.do.halee@gmail.com>"]
-homepage = "https://github.com/just-do-halee/plankcoin"
-repository = "https://github.com/just-do-halee/plankcoin"
-keywords = ["plankcoin", "blockchain", "crypto"]
-categories = ["cryptography", "cryptography::cryptocurrencies"]
-license = "LGPL-3.0-or-later"
-readme = "README.md"
 description = "Plankcoin node"
+authors.workspace = true
+version.workspace = true
+edition.workspace = true
+categories.workspace = true
+keywords.workspace = true
+repository.workspace = true
+homepage.workspace = true
+license.workspace = true
+readme.workspace = true
 
 [dependencies]
 # core
 plankcoin-core = { path = "../plankcoin-core" }
 
 # log
-pretty_env_logger = "0.4.0"
-log = "0.4.17"
+log = { workspace = true }
+pretty_env_logger = { workspace = true }
 
 # error
-anyhow = "1"
+anyhow = { workspace = true }
+thiserror = { workspace = true }
 
 # cli & config
 clap = { version = "3.2.22", features = ["derive"] }

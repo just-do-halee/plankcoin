@@ -6,6 +6,7 @@ enum Error {
     RootWalletDoesNotExist,
 }
 
+#[inline]
 pub fn read(wallet_path: &Path) -> AnyResult<()> {
     info!("Finding root wallet...");
 

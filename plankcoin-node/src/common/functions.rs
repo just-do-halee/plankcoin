@@ -30,10 +30,12 @@ pub fn stdin_get_char(mut f: impl FnMut(char) -> bool) -> AnyResult<char> {
     }
 }
 
+#[inline]
 pub fn is_y_or_n(c: char) -> bool {
     c == 'y' || c == 'n'
 }
 
+#[inline]
 pub fn to_capitalize(s: &str) -> String {
     match s.len() {
         0 => String::new(),

@@ -14,6 +14,8 @@ impl Settings {
     }
 }
 
+#[inline]
+#[once(panic)]
 pub fn try_build() -> AnyResult<Settings> {
     let opt = opt::parse(); // parse command line arguments
 

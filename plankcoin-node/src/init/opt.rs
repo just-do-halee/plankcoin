@@ -42,6 +42,7 @@ pub enum SubCommand {
 }
 
 /// Parse command line arguments
+#[inline]
 #[once(panic)]
 pub fn parse() -> Opt {
     Opt::parse()

@@ -5,6 +5,7 @@ use super::opt::Opt;
 /// This is for simple logging to stderr
 ///
 /// * We may want to use a more advanced logger in the future.
+#[inline]
 #[once(panic)]
 pub fn build(opt: &Opt) -> Result<(), log::SetLoggerError> {
     if opt.quiet {

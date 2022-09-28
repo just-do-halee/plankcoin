@@ -15,6 +15,7 @@ pub struct PlankcoinConfig {
 }
 
 /// Parse configuration file (.toml, .yaml, .json, etc.)
+#[inline]
 #[once(panic)]
 pub fn try_parse(opt: &Opt) -> Result<PlankcoinConfig, ConfigError> {
     Config::builder()

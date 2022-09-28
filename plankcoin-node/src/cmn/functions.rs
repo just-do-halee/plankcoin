@@ -1,4 +1,4 @@
-use crate::common::*;
+use crate::cmn::*;
 
 use crossterm::{
     event::{read, Event, KeyCode},

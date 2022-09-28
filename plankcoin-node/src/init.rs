@@ -2,7 +2,7 @@ mod config;
 mod logger;
 mod opt;
 
-use crate::common::*;
+use crate::cmn::*;
 
 pub struct Settings {
     pub from_opt: opt::Opt,

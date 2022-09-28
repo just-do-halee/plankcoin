@@ -1,10 +1,10 @@
 mod cli;
-mod common;
+mod cmn;
 mod init;
 
 // --------------------
 
-use crate::common::*;
+use crate::cmn::*;
 
 fn main() -> AnyResult<()> {
     let settings = init::try_build()?;

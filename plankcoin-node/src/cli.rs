@@ -1,6 +1,6 @@
 mod wallet;
 
-use crate::{common::*, init::Settings};
+use crate::{cmn::*, init::Settings};
 
 #[inline]
 #[once(panic)]

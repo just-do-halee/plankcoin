@@ -1,31 +1,28 @@
 use crate::cmn::*;
 
-use crossterm::{
-    event::{read, Event, KeyCode},
-    terminal::{disable_raw_mode, enable_raw_mode},
-};
-
-pub fn stdin_get_char(mut f: impl FnMut(char) -> bool) -> AnyResult<char> {
-    // enable raw mode for getting single char without pressing enter
-    debug!("Enabling raw mode");
-    enable_raw_mode()?;
-
-    // read a single char until the key code is not a char
+#[inline]
+pub fn term_read_password(
+    term: &Term,
+    mut f: impl FnMut(&Term, &str) -> io::Result<bool>,
+) -> io::Result<Vec<u8>> {
     loop {
-        debug!("Reading a single char\r");
-        if let Event::Key(key) = read()? {
-            if let KeyCode::Char(ch) = key.code {
-                // filter the char
-                debug!("Filtering a char: {}\r", ch);
-                if f(ch) {
-                    // disable raw mode
-                    debug!("Disabling raw mode\r");
-                    disable_raw_mode()?;
-                    return Ok(ch);
-                }
-            } else {
-                debug!("Key code: {:?}\r", key.code);
-            }
+        trace!("Reading password from terminal securely");
+        let s = term.read_secure_line()?;
+        trace!("Filtering password");
+        if f(term, &s)? {
+            return Ok(s.into_bytes());
+        }
+    }
+}
+
+#[inline]
+pub fn term_get_char(term: &Term, mut f: impl FnMut(char) -> bool) -> io::Result<char> {
+    loop {
+        trace!("Reading a single char");
+        let ch = term.read_char()?;
+        trace!("Filtering a char: {}", ch);
+        if f(ch) {
+            return Ok(ch);
         }
     }
 }
@@ -42,4 +39,26 @@ pub fn to_capitalize(s: &str) -> String {
         1 => s.to_uppercase(),
         _ => s[..1].to_uppercase() + &s[1..],
     }
+}
+
+// --------------------------------------------------
+
+#[inline]
+pub fn to_hex_string(s: &[u8], mode: HexMode) -> String {
+    use fmt::Write;
+    trace!("Converting bytes to hex string, mode: {}", mode);
+    let mut hex = String::with_capacity(s.len() * 2);
+
+    if mode == HexMode::Lower0x || mode == HexMode::Upper0x {
+        hex.write_str("0x").unwrap();
+    }
+
+    for byte in s {
+        match mode {
+            HexMode::Lower | HexMode::Lower0x => write!(&mut hex, "{:02x}", byte).unwrap(),
+            HexMode::Upper | HexMode::Upper0x => write!(&mut hex, "{:02X}", byte).unwrap(),
+        }
+    }
+    trace!("Hex string: {}", hex);
+    hex
 }

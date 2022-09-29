@@ -4,17 +4,17 @@ pub use std::{
     path::{self, Path, PathBuf},
 };
 
-pub use constant::*;
+pub use constants::*;
 pub use enums::*;
-pub use function::*;
-pub use library::*;
+pub use functions::*;
+pub use libraries::*;
 pub use macros::*;
 pub use traits::*;
 
-mod constant;
+mod constants;
 mod enums;
-mod function;
-mod library;
+mod functions;
+mod libraries;
 mod traits;
 #[macro_use]
 mod macros;

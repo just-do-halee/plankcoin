@@ -6,6 +6,7 @@ pub struct Account {
 }
 
 impl Default for Account {
+    #[inline]
     fn default() -> Self {
         Self {
             keypair: Keypair::generate(&mut OsRng),

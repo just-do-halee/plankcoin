@@ -27,5 +27,8 @@ pretty_env_logger = "0.4"
 anyhow = "1"
 thiserror = "1"
 
+# time
+chrono = "0.4"
+
 # serde
 serde = { version = "1", features = ["derive"] }

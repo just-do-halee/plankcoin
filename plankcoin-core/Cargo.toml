@@ -20,9 +20,15 @@ pretty_env_logger = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
 
+# time
+chrono = { workspace = true }
+
 # serde
 serde = { workspace = true }
 ed25519-dalek = { version = "1", features = ["serde"] }
+
+# crypto
+sha3 = "0.10"
 
 # util
 rand = "0.7" # 0.7 for compatibility with ed25519-dalek

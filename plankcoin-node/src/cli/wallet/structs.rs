@@ -17,7 +17,6 @@ impl Wallet {
     }
 
     /// Create a new wallet reading from the given path and passphrase
-    #[inline]
     pub fn try_read(
         path: impl Into<PathBuf>,
         passphrase: [u8; AES_KEY_SIZE],
@@ -27,7 +26,6 @@ impl Wallet {
         Self::decrypt(&bytes, passphrase, path)
     }
     /// Create a new wallet file at the given passhprase and write mode
-    #[inline]
     pub fn try_write(&self, passphrase: [u8; AES_KEY_SIZE], mode: WriteMode) -> Result<(), Error> {
         if mode == WriteMode::CreateNew && self.path.exists() {
             return Err(io::Error::new(

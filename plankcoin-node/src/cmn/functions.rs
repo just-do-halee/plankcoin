@@ -1,6 +1,5 @@
 use crate::cmn::*;
 
-#[inline]
 pub fn term_read_password(
     term: &Term,
     mut f: impl FnMut(&Term, &str) -> io::Result<bool>,
@@ -15,7 +14,6 @@ pub fn term_read_password(
     }
 }
 
-#[inline]
 pub fn term_get_char(term: &Term, mut f: impl FnMut(char) -> bool) -> io::Result<char> {
     loop {
         trace!("Reading a single char");

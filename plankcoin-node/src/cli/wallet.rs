@@ -2,7 +2,6 @@ use super::*;
 
 pub use structs::Wallet;
 
-#[inline]
 pub fn read(mut term: &Term, path: &Path) -> AnyResult<Wallet> {
     info!("Finding wallet...");
 

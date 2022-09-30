@@ -1,36 +1,45 @@
 use super::*;
 
+pub use sd_boxes::*;
+pub use vault_info::VaultInfo;
+
 #[derive(Debug, Default)]
 pub struct Vault {
     pub info: VaultInfo,
-    pub sd_boxes: Vec<SdBox>, // = safe deposit boxes
+    sd_boxes: SdBoxes, // = safe deposit boxes
 }
 
 impl Vault {
     #[inline]
+    pub fn sd_boxes(&self) -> &SdBoxes {
+        &self.sd_boxes
+    }
+
+    #[inline]
+    pub fn is_locked(&self) -> bool {
+        self.info.is_locked()
+    }
+
+    #[inline]
+    pub fn lock(&self) {
+        self.info.lock()
+    }
+
+    #[inline]
     pub fn new_genesis() -> Self {
-        Default::default()
+        Self {
+            info: VaultInfo::new_genesis(),
+            ..Default::default()
+        }
     }
     #[inline]
-    pub fn new(pvi_hash: [u8; HASH_SIZE], sd_boxes: Vec<SdBox>) -> Self {
+    pub fn new(level: u64, pvi_hash: Hash, sd_boxes: SdBoxes, owner: Hash) -> Self {
         Self {
-            info: VaultInfo::new(pvi_hash),
+            info: VaultInfo::new(level, pvi_hash, sd_boxes.to_sdbr_hash(), owner),
             sd_boxes,
         }
     }
-
-    #[inline]
-    pub fn is_mined(&self) -> bool {
-        todo!()
-    }
-
-    pub fn mine(&mut self, level: u64) {
-        todo!()
-    }
 }
 
-use sd_box::*;
-use vault_info::*;
-
-mod sd_box;
+mod sd_boxes;
 mod vault_info;

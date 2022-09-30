@@ -32,3 +32,4 @@ sha3 = "0.10"
 
 # util
 rand = "0.7" # 0.7 for compatibility with ed25519-dalek
+primitive-types = "0.12"

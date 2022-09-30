@@ -1,5 +1,7 @@
 use super::*;
 
+pub use vault::*;
+
 pub struct Bank {
     vaults: Vec<Vault>,
 }
@@ -24,5 +26,4 @@ impl Default for Bank {
     }
 }
 
-use vault::*;
 mod vault;

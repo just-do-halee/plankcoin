@@ -1,5 +1,7 @@
 use super::*;
 
+pub use traits::*;
+
 #[derive(Debug)]
 pub struct VaultInfo {
     version: i64,
@@ -10,6 +12,37 @@ pub struct VaultInfo {
     pvi_hash: Hash,  // = previous vault information hash
     sdbr_hash: Hash, // = safe deposit boxes merkle root hash
     locked: Cell<bool>,
+}
+
+impl HasVaultInfo for VaultInfo {
+    #[inline]
+    fn to_version(&self) -> i64 {
+        self.version
+    }
+    #[inline]
+    fn to_locked_time(&self) -> u64 {
+        self.locked_time.get()
+    }
+    #[inline]
+    fn to_password(&self) -> u64 {
+        self.password.get()
+    }
+    #[inline]
+    fn to_level(&self) -> u64 {
+        self.level
+    }
+    #[inline]
+    fn to_owner(&self) -> Hash {
+        self.owner
+    }
+    #[inline]
+    fn to_pvi_hash(&self) -> Hash {
+        self.pvi_hash
+    }
+    #[inline]
+    fn to_sdbr_hash(&self) -> Hash {
+        self.sdbr_hash
+    }
 }
 
 impl Default for VaultInfo {
@@ -169,3 +202,5 @@ impl VaultInfo {
         )
     }
 }
+
+mod traits;

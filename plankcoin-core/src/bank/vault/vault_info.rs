@@ -127,7 +127,9 @@ impl VaultInfo {
     #[inline]
     pub fn new_genesis() -> Self {
         Self {
+            level: GENESIS_VAULT_LEVEL,
             locked_time: Cell::new(VaultTime::now()),
+            locked: Cell::new(true),
             ..Default::default()
         }
     }

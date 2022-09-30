@@ -105,10 +105,7 @@ impl VaultInfo {
         debug!("target_hash(0x): {:#065x}", target_head);
         Hash::from(target_head.to_bytes())
     }
-    #[inline]
-    pub fn get_password(&self) -> u64 {
-        self.password.get()
-    }
+
     #[inline]
     pub fn set_password(&self, password: u64) {
         debug!("set password: {}", password);
@@ -119,6 +116,7 @@ impl VaultInfo {
         }
         self.password.set(password)
     }
+
     #[inline]
     pub fn is_genesis(&self) -> bool {
         self.owner.is_zero() && self.pvi_hash.is_zero()

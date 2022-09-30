@@ -16,6 +16,11 @@ impl Vault {
     }
 
     #[inline]
+    pub fn is_genesis(&self) -> bool {
+        self.info.is_genesis()
+    }
+
+    #[inline]
     pub fn is_locked(&self) -> bool {
         self.info.is_locked()
     }

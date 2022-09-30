@@ -86,6 +86,10 @@ impl VaultInfo {
         }
         self.password.set(password)
     }
+    #[inline]
+    pub fn is_genesis(&self) -> bool {
+        self.owner.is_zero() && self.pvi_hash.is_zero()
+    }
 
     #[inline]
     pub fn is_locked(&self) -> bool {
@@ -110,6 +114,11 @@ impl VaultInfo {
     pub fn lock(&self) {
         if self.locked.get() && !self._is_locked() {
             debug!("Vault locking failed.");
+            if self.is_genesis() {
+                let msg = "The vault is a genesis vault and is already locked.";
+                debug!("{msg}");
+                panic!("{msg}");
+            }
             panic!("The vault is locked and the validation fails.")
         }
         debug!("Vault locking started.");

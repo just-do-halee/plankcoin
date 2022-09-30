@@ -7,4 +7,4 @@ pub mod primitives {
 }
 pub mod account;
 pub mod bank;
-pub mod p2p;
+pub mod net;

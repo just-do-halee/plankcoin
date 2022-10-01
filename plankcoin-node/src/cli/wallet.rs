@@ -165,7 +165,11 @@ impl Wallet {
     // ---------------------------------------------------------------------------------------------
 
     /// Returns the rest of the bytes without the wallet check bytes
+    #[inline]
     fn try_read_encryted_file(path: impl AsRef<Path>) -> Result<Vec<u8>, Error> {
+        Self::_try_read_encrypted_file(path.as_ref())
+    }
+    fn _try_read_encrypted_file(path: &Path) -> Result<Vec<u8>, Error> {
         let mut file = fs::File::open(path)?;
 
         let mut wallet_check_bytes = [0u8; WALLET_CHECK_BYTES.len()];

@@ -14,6 +14,7 @@ impl Sdboxes {
     pub fn new() -> Self {
         Default::default()
     }
+    #[inline]
     pub fn to_mkr_hash(&self) -> Hash {
         Hash::default()
     }

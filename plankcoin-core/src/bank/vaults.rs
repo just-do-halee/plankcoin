@@ -9,6 +9,7 @@ pub struct Vaults {
     vaults: Vec<Vault>,
 }
 impl Default for Vaults {
+    #[inline]
     fn default() -> Self {
         Self {
             vaults: vec![Vault::new_genesis()],

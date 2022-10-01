@@ -1,9 +1,16 @@
 mod cmn;
 use cmn::*;
 
-pub mod primitives {
+pub mod prelude {
     use super::*;
-    pub use cmn::{Hash, Uint};
+    pub use cmn::{
+        //
+        constants::*,
+        enums::*,
+        structs::*,
+        traits::*,
+        types::*,
+    };
 }
 pub mod account;
 pub mod auditor;

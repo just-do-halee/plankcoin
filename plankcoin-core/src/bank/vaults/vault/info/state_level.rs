@@ -17,3 +17,13 @@ impl ToHash for StateLevelInfo {
             .chain_update(self.sdboxes_mkr_hash.as_ref())
     }
 }
+
+impl StateLevelInfo {
+    #[inline]
+    pub fn new(state_mkr_hash: Hash, sdboxes_mkr_hash: Hash) -> Self {
+        Self {
+            state_mkr_hash,
+            sdboxes_mkr_hash,
+        }
+    }
+}

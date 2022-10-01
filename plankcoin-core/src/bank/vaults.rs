@@ -1,6 +1,8 @@
 use super::*;
 
-pub use vault::*;
+pub mod vault;
+
+use vault::*;
 
 #[derive(Debug)]
 pub struct Vaults {
@@ -17,10 +19,12 @@ impl Default for Vaults {
 impl Vaults {
     #[inline]
     pub fn new_with_genesis() -> Self {
+        trace!("Vaults were created with genesis vault");
         Default::default()
     }
     #[inline]
     pub fn new(vaults: Vec<Vault>) -> Self {
+        trace!("Vaults were created with {} vaults", vaults.len());
         Self { vaults }
     }
     /// # Panic
@@ -40,5 +44,3 @@ impl Vaults {
         self.vaults.iter()
     }
 }
-
-mod vault;

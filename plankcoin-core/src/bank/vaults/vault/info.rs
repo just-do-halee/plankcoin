@@ -1,5 +1,9 @@
 use super::*;
 
+mod state_level;
+mod sup_level;
+mod top_level;
+
 pub use state_level::*;
 pub use sup_level::*;
 pub use top_level::*;
@@ -137,10 +141,17 @@ impl VaultInfo {
     }
 
     #[inline]
-    pub fn new(level: u64, pvi_hash: Hash, sdbr_hash: Hash, owner: Hash) -> Self {
+    pub fn new(
+        level: u64,
+        pvi_hash: Hash,
+        state_mkr_hash: Hash,
+        sdboxes_mkr_hash: Hash,
+        owner: Hash,
+    ) -> Self {
         Self {
             top: TopLevelInfo::new(level, pvi_hash),
             sup: RefCell::new(SupLevelInfo::new(owner)),
+            state: StateLevelInfo::new(state_mkr_hash, sdboxes_mkr_hash),
             ..Default::default()
         }
     }
@@ -154,7 +165,3 @@ impl VaultInfo {
         Hash::from_slice(&hasher.finalize())
     }
 }
-
-mod state_level;
-mod sup_level;
-mod top_level;

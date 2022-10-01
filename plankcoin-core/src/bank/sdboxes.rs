@@ -1,6 +1,8 @@
 use super::*;
 
-pub use sdbox::Sdbox;
+pub mod sdbox;
+
+use sdbox::Sdbox;
 
 #[derive(Debug, Default)]
 pub struct Sdboxes {
@@ -16,5 +18,3 @@ impl Sdboxes {
         Hash::default()
     }
 }
-
-mod sdbox;

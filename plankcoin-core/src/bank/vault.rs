@@ -1,7 +1,7 @@
 use super::*;
 
 pub use sd_boxes::*;
-pub use vault_info::VaultInfo;
+pub use vault_info::*;
 
 #[derive(Debug, Default)]
 pub struct Vault {

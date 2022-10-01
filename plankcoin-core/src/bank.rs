@@ -2,12 +2,12 @@ use super::*;
 
 pub use enums::*;
 pub use errors::*;
-pub use vault::*;
+pub use vaults::*;
 
 pub struct Bank {
     owner: Keypair,
     kind: BankKind,
-    vaults: Vec<Vault>,
+    vaults: Vaults,
 }
 
 impl Default for Bank {
@@ -15,7 +15,7 @@ impl Default for Bank {
     fn default() -> Self {
         Self {
             owner: Keypair::generate(&mut OsRng),
-            vaults: vec![Vault::new_genesis()],
+            vaults: Vaults::new_with_genesis(),
             kind: BankKind::Big,
         }
     }
@@ -31,8 +31,8 @@ impl Bank {
         self.kind
     }
     #[inline]
-    pub fn latest_vault(&self) -> &Vault {
-        self.vaults.last().unwrap()
+    pub fn vaults(&self) -> &Vaults {
+        &self.vaults
     }
 
     #[inline]
@@ -46,15 +46,36 @@ impl Bank {
 
     /// Validate the vaults in the bank.
     pub fn audit(&self) -> Result<(), AuditError> {
-        // 1. `genesis vault must be the first vault`
-        if !self.vaults[0].is_genesis() {
-            return Err(AuditError::GenesisVaultNotFound);
+        match self.kind {
+            BankKind::Big => self.audit_for_big(),
+            // BankKind::Medium => self.audit_for_medium(),
+            // BankKind::Small => self.audit_for_small(),
+            _ => todo!(),
         }
+    }
 
-        // first pvi_hash must be the same as the genesis vault's hash
-        let mut pvi_hash = self.vaults[0].info.to_hash();
-        // first locked_time must be the same as the genesis vault's locked_time
-        let mut p_locked_time = self.vaults[0].info.to_locked_time();
+    // ---------------------------------------------------------------------------------------------
+
+    fn audit_for_big(&self) -> Result<(), AuditError> {
+        // previous vault info hash
+        // and previous locked time
+        // to keep track of the whole vaults
+        let mut pvi_hash;
+        let mut p_locked_time;
+
+        {
+            // 1. `genesis vault must be the first vault`
+            let genesis = self.vaults.first();
+            if !genesis.is_genesis() {
+                return Err(AuditError::GenesisVaultNotFound);
+            }
+
+            // initial previous vault info hash
+            // and initial previous locked time
+            // must be the equal to the genesis vault's
+            pvi_hash = genesis.info.to_hash();
+            p_locked_time = genesis.info.sup_level().locked_time;
+        }
 
         // iterate through the rest of the vaults
         self.vaults.iter().skip(1).try_for_each(|vault| {
@@ -64,11 +85,11 @@ impl Bank {
             }
 
             // 3. `the vault's pvi_hash must be the same as the actual previous vault's hash`
-            if vault.info.to_pvi_hash() != pvi_hash {
+            if vault.info.top_level().pvi_hash != pvi_hash {
                 return Err(AuditError::PviHashMismatch);
             }
 
-            let locked_time = vault.info.to_locked_time();
+            let locked_time = vault.info.sup_level().locked_time;
 
             // 4. `the vault's locked_time must be more than the actual previous vault's locked_time`
             if locked_time > p_locked_time {
@@ -82,8 +103,8 @@ impl Bank {
                 return Err(AuditError::VaultHashNotLessThanTargetHash);
             }
 
-            // 6. `the vault's sdbr_hash must be the same as the actual sdbr_hash`
-            if vault.info.to_sdbr_hash() != vault.sd_boxes().to_sdbr_hash() {
+            // 6. `the vault's sdboxes_mkr_hash must be the same as the actual sdboxes_mkr_hash`
+            if vault.info.state_level().sdboxes_mkr_hash != vault.sdboxes().to_mkr_hash() {
                 return Err(AuditError::SdbrHashMismatch);
             }
 
@@ -97,4 +118,4 @@ impl Bank {
 
 mod enums;
 mod errors;
-mod vault;
+mod vaults;

@@ -1,4 +1,7 @@
-pub use std::cell::Cell;
+pub use std::{
+    cell::{Cell, Ref, RefCell},
+    ops::Deref,
+};
 
 pub use constants::*;
 pub use libraries::*;

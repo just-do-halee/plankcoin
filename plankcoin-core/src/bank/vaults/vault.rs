@@ -1,18 +1,18 @@
 use super::*;
 
-pub use sd_boxes::*;
-pub use vault_info::*;
+pub use info::*;
+pub use sdboxes::*;
 
 #[derive(Debug, Default)]
 pub struct Vault {
     pub info: VaultInfo,
-    sd_boxes: SdBoxes, // = safe deposit boxes
+    sdboxes: Sdboxes, // = safe deposit boxes
 }
 
 impl Vault {
     #[inline]
-    pub fn sd_boxes(&self) -> &SdBoxes {
-        &self.sd_boxes
+    pub fn sdboxes(&self) -> &Sdboxes {
+        &self.sdboxes
     }
 
     #[inline]
@@ -38,13 +38,13 @@ impl Vault {
         }
     }
     #[inline]
-    pub fn new(level: u64, pvi_hash: Hash, sd_boxes: SdBoxes, owner: Hash) -> Self {
+    pub fn new(level: u64, pvi_hash: Hash, sdboxes: Sdboxes, owner: Hash) -> Self {
         Self {
-            info: VaultInfo::new(level, pvi_hash, sd_boxes.to_sdbr_hash(), owner),
-            sd_boxes,
+            info: VaultInfo::new(level, pvi_hash, sdboxes.to_mkr_hash(), owner),
+            sdboxes,
         }
     }
 }
 
-mod sd_boxes;
-mod vault_info;
+mod info;
+mod sdboxes;

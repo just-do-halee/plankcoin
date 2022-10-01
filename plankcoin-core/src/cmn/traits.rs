@@ -14,3 +14,7 @@ impl<const N: usize> ToBytes<N> for Uint {
         bytes
     }
 }
+
+pub trait ToHash {
+    fn to_hash<T: Digest>(&self, hasher: T) -> T;
+}

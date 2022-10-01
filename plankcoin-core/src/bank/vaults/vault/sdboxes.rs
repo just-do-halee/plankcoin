@@ -1,20 +1,20 @@
 use super::*;
 
-pub use sd_box::SdBox;
+pub use sdbox::Sdbox;
 
 #[derive(Debug, Default)]
-pub struct SdBoxes {
-    boxes: Vec<SdBox>,
+pub struct Sdboxes {
+    boxes: Vec<Sdbox>,
 }
 
-impl SdBoxes {
+impl Sdboxes {
     #[inline]
     pub fn new() -> Self {
         Default::default()
     }
-    pub fn to_sdbr_hash(&self) -> Hash {
+    pub fn to_mkr_hash(&self) -> Hash {
         Hash::default()
     }
 }
 
-mod sd_box;
+mod sdbox;

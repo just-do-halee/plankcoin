@@ -1,67 +1,33 @@
 use super::*;
 
-pub use traits::*;
+pub use state_level::*;
+pub use sup_level::*;
+pub use top_level::*;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct VaultInfo {
-    version: i64,
-    locked_time: Cell<u64>,
-    password: Cell<u64>,
-    level: u64,
-    owner: Hash,
-    pvi_hash: Hash,  // = previous vault information hash
-    sdbr_hash: Hash, // = safe deposit boxes merkle root hash
+    top: TopLevelInfo,
+    /// For the lock/unlock of the vault info.
+    sup: RefCell<SupLevelInfo>,
+    state: StateLevelInfo,
+    /// For the lock/unlock of the vault info.
     locked: Cell<bool>,
 }
 
-impl HasVaultInfo for VaultInfo {
-    #[inline]
-    fn to_version(&self) -> i64 {
-        self.version
-    }
-    #[inline]
-    fn to_locked_time(&self) -> u64 {
-        self.locked_time.get()
-    }
-    #[inline]
-    fn to_password(&self) -> u64 {
-        self.password.get()
-    }
-    #[inline]
-    fn to_level(&self) -> u64 {
-        self.level
-    }
-    #[inline]
-    fn to_owner(&self) -> Hash {
-        self.owner
-    }
-    #[inline]
-    fn to_pvi_hash(&self) -> Hash {
-        self.pvi_hash
-    }
-    #[inline]
-    fn to_sdbr_hash(&self) -> Hash {
-        self.sdbr_hash
-    }
-}
-
-impl Default for VaultInfo {
-    #[inline]
-    fn default() -> Self {
-        Self {
-            version: VAULT_VERSION,
-            locked_time: Cell::new(0),
-            password: Cell::new(0),
-            level: 0,
-            owner: Hash::zero(),
-            sdbr_hash: Hash::zero(),
-            pvi_hash: Hash::zero(),
-            locked: Cell::new(false),
-        }
-    }
-}
-
 impl VaultInfo {
+    #[inline]
+    pub fn top_level(&self) -> &TopLevelInfo {
+        &self.top
+    }
+    #[inline]
+    pub fn sup_level(&self) -> Ref<SupLevelInfo> {
+        self.sup.borrow()
+    }
+    #[inline]
+    pub fn state_level(&self) -> &StateLevelInfo {
+        &self.state
+    }
+
     /// For calculating the target hash of the vault.
     ///
     /// ```
@@ -75,18 +41,20 @@ impl VaultInfo {
     pub const LEVEL_MASK: u64 = 0x00000000000000FF;
     #[inline]
     pub fn to_target_hash(&self) -> Hash {
-        debug!("level: {:#066b}", self.level);
-        let target_shr_n_bits = (self.level & Self::LEVEL_MASK) as u8;
+        let TopLevelInfo { level, .. } = self.top_level();
+
+        debug!("level: {:#066b}", level);
+        let target_shr_n_bits = (level & Self::LEVEL_MASK) as u8;
         debug!(
             "target_shr_n_bits: ({:#066b} & {:#066b}) = {:#010b}",
-            self.level,
+            level,
             Self::LEVEL_MASK,
             target_shr_n_bits
         );
-        let target_head = self.level & !Self::LEVEL_MASK;
+        let target_head = level & !Self::LEVEL_MASK;
         debug!(
             "target_head: ({:#066b} & {:#066b}) = {:#066b}",
-            self.level,
+            level,
             !Self::LEVEL_MASK,
             target_head
         );
@@ -107,19 +75,8 @@ impl VaultInfo {
     }
 
     #[inline]
-    pub fn set_password(&self, password: u64) {
-        debug!("set password: {}", password);
-        if self.locked.get() {
-            debug!("the vault unlocked");
-            self.locked.set(false);
-            self.locked_time.set(0);
-        }
-        self.password.set(password)
-    }
-
-    #[inline]
     pub fn is_genesis(&self) -> bool {
-        self.owner.is_zero() && self.pvi_hash.is_zero()
+        self.sup_level().owner.is_zero() && self.top.pvi_hash.is_zero()
     }
 
     #[inline]
@@ -127,6 +84,7 @@ impl VaultInfo {
         self.locked.get()
     }
 
+    /// Actual calculation of the hash of the target.
     #[inline]
     fn _is_locked(&self) -> bool {
         let hash = self.to_hash();
@@ -143,7 +101,7 @@ impl VaultInfo {
     /// Panics if the vault is locked and the validation fails.
     #[inline]
     pub fn lock(&self) {
-        if self.locked.get() && !self._is_locked() {
+        if self.is_locked() && !self._is_locked() {
             debug!("Vault locking failed.");
             if self.is_genesis() {
                 let msg = "The vault is a genesis vault and is already locked.";
@@ -153,13 +111,18 @@ impl VaultInfo {
             panic!("The vault is locked and the validation fails.")
         }
         debug!("Vault locking started.");
+        let mut sup = self.sup.borrow_mut();
+        // until the vault is locked,
+        // changing the password and finding the target hash
         while !self._is_locked() {
-            let new_password = self.password.get() + 1;
+            let new_password = sup.password + 1;
             debug!("Trying to lock the vault... password: {}", new_password);
-            self.password.set(new_password);
+            sup.password = new_password;
         }
+        // set the vault locked time
         let now = VaultTime::now();
-        self.locked_time.set(now);
+        sup.locked_time = now;
+        // set the locked flag
         self.locked.set(true);
         debug!("Vault is locked! Time: {}", now);
     }
@@ -167,8 +130,7 @@ impl VaultInfo {
     #[inline]
     pub fn new_genesis() -> Self {
         Self {
-            level: GENESIS_VAULT_LEVEL,
-            locked_time: Cell::new(VaultTime::now()),
+            sup: RefCell::new(SupLevelInfo::new_genesis()),
             locked: Cell::new(true),
             ..Default::default()
         }
@@ -177,28 +139,22 @@ impl VaultInfo {
     #[inline]
     pub fn new(level: u64, pvi_hash: Hash, sdbr_hash: Hash, owner: Hash) -> Self {
         Self {
-            level,
-            owner,
-            pvi_hash,
-            sdbr_hash,
+            top: TopLevelInfo::new(level, pvi_hash),
+            sup: RefCell::new(SupLevelInfo::new(owner)),
             ..Default::default()
         }
     }
 
     #[inline]
     pub fn to_hash(&self) -> Hash {
-        Hash::from_slice(
-            &Sha3_256::new()
-                .chain_update(&self.version.to_be_bytes())
-                .chain_update(&self.locked_time.get().to_be_bytes())
-                .chain_update(&self.password.get().to_be_bytes())
-                .chain_update(&self.level.to_be_bytes())
-                .chain_update(&self.owner)
-                .chain_update(&self.pvi_hash)
-                .chain_update(&self.sdbr_hash)
-                .finalize(),
-        )
+        let mut hasher = Sha3_256::new();
+        hasher = self.top.to_hash(hasher);
+        hasher = self.sup_level().to_hash(hasher);
+        hasher = self.state_level().to_hash(hasher);
+        Hash::from_slice(&hasher.finalize())
     }
 }
 
-mod traits;
+mod state_level;
+mod sup_level;
+mod top_level;

@@ -70,7 +70,7 @@ impl Wallet {
         passphrase: [u8; AES_KEY_SIZE],
     ) -> Result<Self, Error> {
         let path = path.into();
-        let bytes = Self::try_read_encryted_file(&path)?;
+        let bytes = Self::try_read_encrypted_file(&path)?;
         Self::decrypt(&bytes, passphrase, path)
     }
     /// Create a new wallet file at the given passhprase and write mode
@@ -97,7 +97,10 @@ impl Wallet {
         debug!("Writing wallet check bytes {}", WALLET_CHECK_BYTES.to_hex());
         file.write_all(&WALLET_CHECK_BYTES)?;
 
-        debug!("Writing wallet encryted bytes {}", encrypted_bytes.to_hex());
+        debug!(
+            "Writing wallet encrypted bytes {}",
+            encrypted_bytes.to_hex()
+        );
         file.write_all(&encrypted_bytes)?;
         Ok(())
     }
@@ -166,7 +169,7 @@ impl Wallet {
 
     /// Returns the rest of the bytes without the wallet check bytes
     #[inline]
-    fn try_read_encryted_file(path: impl AsRef<Path>) -> Result<Vec<u8>, Error> {
+    fn try_read_encrypted_file(path: impl AsRef<Path>) -> Result<Vec<u8>, Error> {
         Self::_try_read_encrypted_file(path.as_ref())
     }
     fn _try_read_encrypted_file(path: &Path) -> Result<Vec<u8>, Error> {

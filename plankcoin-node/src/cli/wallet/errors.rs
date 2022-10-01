@@ -1,7 +1,7 @@
 use super::*;
 
 #[derive(Debug, Error)]
-pub enum Error {
+pub enum WalletError {
     #[error("IO error")]
     Io(#[from] std::io::Error),
     #[error("Bincode error")]

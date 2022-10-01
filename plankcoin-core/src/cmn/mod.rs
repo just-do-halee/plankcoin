@@ -6,14 +6,14 @@ pub use std::{
 
 pub use constants::*;
 pub use enums::*;
-pub use libraries::*;
+pub use externs::*;
 pub use structs::*;
 pub use traits::*;
 pub use types::*;
 
 pub mod constants;
 pub mod enums;
-pub mod libraries;
+pub mod externs;
 pub mod structs;
 pub mod traits;
 pub mod types;

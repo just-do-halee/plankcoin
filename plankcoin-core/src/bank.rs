@@ -1,9 +1,12 @@
 use super::*;
 
+pub use enums::*;
 pub use errors::*;
 pub use vault::*;
 
 pub struct Bank {
+    owner: Keypair,
+    kind: BankKind,
     vaults: Vec<Vault>,
 }
 
@@ -11,19 +14,34 @@ impl Default for Bank {
     #[inline]
     fn default() -> Self {
         Self {
+            owner: Keypair::generate(&mut OsRng),
             vaults: vec![Vault::new_genesis()],
+            kind: BankKind::Big,
         }
     }
 }
 
 impl Bank {
     #[inline]
+    pub fn owner(&self) -> PublicKey {
+        self.owner.public
+    }
+    #[inline]
+    pub fn kind(&self) -> BankKind {
+        self.kind
+    }
+    #[inline]
     pub fn latest_vault(&self) -> &Vault {
         self.vaults.last().unwrap()
     }
+
     #[inline]
-    pub fn new() -> Self {
-        Default::default()
+    pub fn new(owner: Keypair, kind: BankKind) -> Self {
+        Self {
+            owner,
+            kind,
+            ..Default::default()
+        }
     }
 
     /// Validate the vaults in the bank.
@@ -77,5 +95,6 @@ impl Bank {
     }
 }
 
+mod enums;
 mod errors;
 mod vault;

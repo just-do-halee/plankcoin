@@ -109,7 +109,7 @@ impl<'a> Auditor<'a> {
             if current_vault.info.state_level().sdboxes_mkr_hash
                 != current_vault.sdboxes().to_mkr_hash()
             {
-                return Err(AuditError::SdbrHashMismatch);
+                return Err(AuditError::SdboxesMkrHashMismatch);
             }
         }
 

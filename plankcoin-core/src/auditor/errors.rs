@@ -14,5 +14,5 @@ pub enum AuditError {
     #[error("Vault hash is not less than target hash")]
     VaultHashNotLessThanTargetHash,
     #[error("Safe deposit boxes merkle root hash mismatch")]
-    SdbrHashMismatch,
+    SdboxesMkrHashMismatch,
 }

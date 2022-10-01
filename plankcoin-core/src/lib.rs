@@ -6,5 +6,6 @@ pub mod primitives {
     pub use cmn::{Hash, Uint};
 }
 pub mod account;
+pub mod auditor;
 pub mod bank;
 pub mod net;

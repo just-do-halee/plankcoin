@@ -1,4 +1,4 @@
-use crate::cmn::*;
+use super::*;
 
 use clap::{AppSettings, ArgAction, Parser, Subcommand};
 
@@ -23,6 +23,14 @@ pub struct Opt {
     pub subcmd: SubCommand,
 }
 
+impl Opt {
+    /// Parse command line arguments
+    #[inline]
+    pub fn get() -> Opt {
+        Opt::parse()
+    }
+}
+
 #[derive(Debug, Subcommand)]
 pub enum SubCommand {
     /// Start node
@@ -39,11 +47,4 @@ pub enum SubCommand {
         #[clap(short, long)]
         full: bool,
     },
-}
-
-/// Parse command line arguments
-#[inline]
-#[once(panic)]
-pub fn parse() -> Opt {
-    Opt::parse()
 }

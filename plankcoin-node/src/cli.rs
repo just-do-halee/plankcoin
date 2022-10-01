@@ -1,13 +1,15 @@
+use super::*;
+
 mod wallet;
 
-use crate::{cmn::*, init::Settings};
+use wallet::*;
 
 #[inline]
 #[once(panic)]
-pub fn run(settings: Settings) -> AnyResult<()> {
+pub fn run(settings: init::Settings) -> AnyResult<()> {
     let term = Term::stdout();
 
-    let wallet = wallet::read(&term, settings.as_wallet_path())?;
+    let wallet = Wallet::read_from_terminal(&term, settings.as_wallet_path())?;
 
     Ok(())
 }

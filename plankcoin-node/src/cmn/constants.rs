@@ -13,3 +13,6 @@ lazy_static! {
 
 pub const DEFAULT_WALLET_PATH: &str = "./plank.wallet";
 pub const DEFAULT_CONFIG_PATH: &str = "./Plankcoin.main.toml";
+
+pub const Y: char = 'y';
+pub const N: char = 'n';

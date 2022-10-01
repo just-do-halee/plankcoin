@@ -1,4 +1,4 @@
-use crate::cmn::*;
+use super::*;
 
 pub fn term_read_password(
     term: &Term,
@@ -37,26 +37,4 @@ pub fn to_capitalize(s: &str) -> String {
         1 => s.to_uppercase(),
         _ => s[..1].to_uppercase() + &s[1..],
     }
-}
-
-// --------------------------------------------------
-
-#[inline]
-pub fn to_hex_string(s: &[u8], mode: HexMode) -> String {
-    use fmt::Write;
-    trace!("Converting bytes to hex string, mode: {}", mode);
-    let mut hex = String::with_capacity(s.len() * 2);
-
-    if mode == HexMode::Lower0x || mode == HexMode::Upper0x {
-        hex.write_str("0x").unwrap();
-    }
-
-    for byte in s {
-        match mode {
-            HexMode::Lower | HexMode::Lower0x => write!(&mut hex, "{:02x}", byte).unwrap(),
-            HexMode::Upper | HexMode::Upper0x => write!(&mut hex, "{:02X}", byte).unwrap(),
-        }
-    }
-    trace!("Hex string: {}", hex);
-    hex
 }

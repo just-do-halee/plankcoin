@@ -61,3 +61,43 @@ pub trait ToHex: AsRef<[u8]> {
 }
 
 // implementations for common types
+impl ToBytes<4> for u32 {
+    #[inline]
+    fn to_bytes(&self) -> [u8; 4] {
+        self.to_be_bytes()
+    }
+}
+impl ToBytes<4> for i32 {
+    #[inline]
+    fn to_bytes(&self) -> [u8; 4] {
+        self.to_be_bytes()
+    }
+}
+impl ToBytes<8> for u64 {
+    #[inline]
+    fn to_bytes(&self) -> [u8; 8] {
+        self.to_be_bytes()
+    }
+}
+impl ToBytes<8> for i64 {
+    #[inline]
+    fn to_bytes(&self) -> [u8; 8] {
+        self.to_be_bytes()
+    }
+}
+impl ToBytes<18> for SocketAddr {
+    #[inline]
+    fn to_bytes(&self) -> [u8; 18] {
+        let mut bytes = [0u8; 18];
+        bytes[16..].copy_from_slice(&self.port().to_be_bytes());
+        match self {
+            SocketAddr::V4(addr) => {
+                bytes[..4].copy_from_slice(&addr.ip().octets());
+            }
+            SocketAddr::V6(addr) => {
+                bytes[..16].copy_from_slice(&addr.ip().octets());
+            }
+        }
+        bytes
+    }
+}
